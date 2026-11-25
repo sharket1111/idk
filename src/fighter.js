@@ -12,8 +12,8 @@ import { SpriteSheet } from './sprite.js';
 
 const NULL_INPUT = { held: () => false, pressed: () => false };
 const DEFAULT_STATS = { maxHp: 100, walkSpeed: 1.5, backSpeed: 1.2, jumpVel: -5.2, jumpVx: 1.35 };
-const STAND_H = 26;
-const CROUCH_H = 20;
+const STAND_H = 28;
+const CROUCH_H = 21;
 const KNOCKDOWN_FRAMES = 60;
 
 export class Fighter {

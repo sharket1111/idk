@@ -9,12 +9,12 @@ export const MOVES = {
   standLight: {
     startup: 4, active: 3, recovery: 7,
     damage: 4, hitstun: 12, blockstun: 8, knockback: 1.1, hitstop: 5,
-    level: 'mid', hitbox: { x: 4, y: -13, w: 10, h: 5 }, pose: 'punch',
+    level: 'mid', hitbox: { x: 4, y: -15, w: 10, h: 5 }, pose: 'punch',
   },
   standHeavy: {
     startup: 9, active: 4, recovery: 16,
     damage: 10, hitstun: 20, blockstun: 14, knockback: 2.6, hitstop: 9,
-    level: 'mid', hitbox: { x: 4, y: -13, w: 14, h: 6 }, pose: 'punch', lunge: 1.1,
+    level: 'mid', hitbox: { x: 4, y: -15, w: 14, h: 6 }, pose: 'punch', lunge: 1.1,
   },
   crouchLight: {
     startup: 4, active: 3, recovery: 8, crouch: true,
@@ -29,11 +29,11 @@ export const MOVES = {
   airLight: {
     startup: 4, active: 6, recovery: 6, air: true,
     damage: 5, hitstun: 14, blockstun: 9, knockback: 1.1, hitstop: 6,
-    level: 'high', hitbox: { x: 2, y: -7, w: 10, h: 6 }, pose: 'airKick',
+    level: 'high', hitbox: { x: 2, y: -9, w: 10, h: 6 }, pose: 'airKick',
   },
   airHeavy: {
     startup: 7, active: 5, recovery: 10, air: true,
     damage: 9, hitstun: 18, blockstun: 12, knockback: 1.9, hitstop: 8,
-    level: 'high', hitbox: { x: 2, y: -8, w: 14, h: 7 }, pose: 'airKick',
+    level: 'high', hitbox: { x: 2, y: -10, w: 14, h: 7 }, pose: 'airKick',
   },
 };

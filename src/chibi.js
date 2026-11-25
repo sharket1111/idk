@@ -93,7 +93,7 @@ function poseOf(f) {
       break;
     case 'crouch':
       p.legs = 'crouch';
-      p.body = 4;
+      p.body = 5;
       break;
     case 'jump':
       p.legs = 'tuck';
@@ -101,7 +101,7 @@ function poseOf(f) {
       p.back = 'up';
       break;
     case 'attack': {
-      if (m.crouch) { p.legs = 'crouch'; p.body = 4; }
+      if (m.crouch) { p.legs = 'crouch'; p.body = 5; }
       if (m.air) p.legs = 'tuck';
       const hb = m.hitbox;
       if (f.attackPhase === 'active') {
@@ -119,7 +119,7 @@ function poseOf(f) {
       p.arm = 'block';
       p.face = 'blink';
       p.lean = -1;
-      if (f.blockCrouch) { p.legs = 'crouch'; p.body = 4; }
+      if (f.blockCrouch) { p.legs = 'crouch'; p.body = 5; }
       break;
     case 'hitstun':
       p.arm = 'up';
@@ -170,7 +170,7 @@ export class ChibiRenderer {
     const stand = this.get({ ...pose, lying: false, arm: 'up', back: 'up', legs: 'stand', lean: 0 });
     const c = makeCanvas();
     const g = c.getContext('2d');
-    g.translate(OX + 12, OY - 7);
+    g.translate(OX + 13, OY - 7);
     g.rotate(-Math.PI / 2);
     g.drawImage(stand, -OX, -OY);
     return c;
@@ -195,7 +195,7 @@ export class ChibiRenderer {
       });
     };
 
-    const top = -12 + p.body; // 몸통 윗선
+    const top = -14 + p.body; // 몸통 윗선 (머리 14px + 몸 14px = 2등신)
     const sh = top + 1;        // 어깨 높이
     const hx = -6 + p.lean;    // 머리 왼쪽
     const hy = top - 12;       // 머리 위쪽
@@ -212,12 +212,12 @@ export class ChibiRenderer {
     const shoe = (x, y, w = 3) => r(x, y, w, 1, 'K');
     switch (p.legs) {
       case 'stand':
-        r(-3, -5, 2, 4, 'L'); r(1, -5, 2, 4, 'L'); shoe(-4, -1); shoe(1, -1);
+        r(-3, -7, 2, 6, 'L'); r(1, -7, 2, 6, 'L'); shoe(-4, -1); shoe(1, -1);
         break;
       case 'walk': {
         const o = [0, 1, 0, -1][p.step];
         const lb = o > 0 ? 1 : 0, lf = o < 0 ? 1 : 0; // 들린 발
-        r(-3 + o, -5, 2, 4 - lb, 'L'); r(1 - o, -5, 2, 4 - lf, 'L');
+        r(-3 + o, -7, 2, 6 - lb, 'L'); r(1 - o, -7, 2, 6 - lf, 'L');
         shoe(-4 + o, -1 - lb); shoe(1 - o, -1 - lf);
         break;
       }
@@ -225,21 +225,21 @@ export class ChibiRenderer {
         r(-4, -2, 2, 1, 'L'); r(2, -2, 2, 1, 'L'); shoe(-5, -1); shoe(2, -1);
         break;
       case 'tuck':
-        r(-3, -5, 2, 2, 'L'); r(1, -4, 2, 1, 'L'); shoe(-4, -3); shoe(2, -3);
+        r(-3, -7, 2, 3, 'L'); r(1, -6, 2, 2, 'L'); shoe(-4, -4); shoe(2, -4);
         break;
       case 'kick':
         r(-4, -2, 2, 1, 'L'); shoe(-5, -1);
         r(2, p.ky, p.reach - 4, 2, 'L'); r(p.reach - 2, p.ky - 1, 2, 3, 'K');
         break;
       case 'airkick':
-        r(-3, -5, 2, 2, 'L'); shoe(-4, -3);
+        r(-3, -7, 2, 3, 'L'); shoe(-4, -4);
         r(1, p.ky, p.reach - 3, 2, 'L'); r(p.reach - 2, p.ky - 1, 2, 3, 'K');
         break;
     }
 
     // 4) 몸통 + 치마
-    r(-3, top, 7, 5, 'O'); r(-3, top, 1, 5, 'o');
-    r(-4, top + 4, 9, 2, 'O'); r(-4, top + 4, 2, 2, 'o'); r(-4, top + 5, 9, 1, 'T');
+    r(-3, top, 7, 6, 'O'); r(-3, top, 1, 6, 'o');
+    r(-4, top + 5, 9, 2, 'O'); r(-4, top + 5, 2, 2, 'o'); r(-4, top + 6, 9, 1, 'T');
     r(1, top, 2, 1, 'A'); // 리본 타이
 
     // 5) 머리 + 표정 (눈: 왼쪽 6~7열, 오른쪽 10~11열, 8~9행)
