@@ -3,25 +3,22 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Pixel Fighter</title>
+  <title>Rhythm Brawl</title>
   <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet" />
   <style>
-    html, body { margin: 0; height: 100%; background: #0c0a14; color: #b8b0c8; font-family: sans-serif; }
+    html, body { margin: 0; height: 100%; background: #2a1a34; color: #d8c8e8; font-family: sans-serif; }
     body { display: flex; flex-direction: column; align-items: center; justify-content: center; }
-    /* 저해상도 캔버스를 정수배로 확대하고, 픽셀이 뭉개지지 않게 */
-    canvas { display: block; image-rendering: pixelated; image-rendering: crisp-edges; }
+    canvas { display: block; image-rendering: pixelated; image-rendering: crisp-edges; cursor: pointer; }
     .help { font-size: 12px; margin-top: 10px; text-align: center; line-height: 1.7; }
-    kbd { background: #2a2338; border-radius: 3px; padding: 0 4px; color: #fff; }
+    kbd { background: #4a3458; border-radius: 3px; padding: 0 4px; color: #fff; }
   </style>
 </head>
 <body>
   <canvas id="game"></canvas>
   <div class="help">
-    P1: <kbd>A</kbd><kbd>D</kbd> 이동 · <kbd>W</kbd> 점프 · <kbd>S</kbd> 앉기 · <kbd>J</kbd> 약공격 · <kbd>K</kbd> 강공격
-    &nbsp;|&nbsp;
-    P2: <kbd>←</kbd><kbd>→</kbd> · <kbd>↑</kbd> · <kbd>↓</kbd> · <kbd>,</kbd> 약 · <kbd>.</kbd> 강<br />
-    상대 반대 방향 누르기 = 가드 (앉아서 = 하단 가드) ·
-    <kbd>F2</kbd>/<kbd>F4</kbd> P1/P2 캐릭터 바꾸기 · <kbd>F1</kbd> P2 CPU 켜기/끄기 · <kbd>F3</kbd> 히트박스 보기 · <kbd>Enter</kbd> 재시작
+    P1: <kbd>D</kbd> 펀치(♥) · <kbd>F</kbd> 킥(★) &nbsp;|&nbsp; P2: <kbd>J</kbd> 펀치 · <kbd>K</kbd> 킥 (CPU 상대일 땐 P1도 J/K 사용 가능)<br />
+    공격 마디: 노트에 맞춰 공격 → 다음 마디에 같은 리듬으로 날아감 · 방어 마디: 같은 버튼으로 막기 (완벽하면 패링)<br />
+    <kbd>Enter</kbd> 시작 · <kbd>F2</kbd>/<kbd>F4</kbd> 캐릭터 · <kbd>F1</kbd> P2 CPU/사람 · <kbd>[</kbd> <kbd>]</kbd> 싱크 조절
   </div>
   <script type="module" src="src/main.js"></script>
 </body>

@@ -1,14 +1,23 @@
-// 게임 전체에서 쓰는 상수. 값을 바꿔가며 손맛을 조절하세요.
+// 게임 전체 상수. 값을 바꿔가며 난이도와 손맛을 조절하세요.
 
-export const SCREEN_W = 240;      // 내부 해상도 (픽셀아트 기준 해상도)
-export const SCREEN_H = 135;
-export const STAGE_W = 480;       // 스테이지 전체 가로 길이 (화면보다 넓어서 카메라가 따라감)
-export const GROUND_Y = 120;      // 바닥 높이 (캐릭터 발 위치)
+export const SCREEN_W = 320;      // 내부 해상도 (픽셀아트 기준)
+export const SCREEN_H = 180;
+export const STAGE_W = 320;
+export const GROUND_Y = 118;      // 캐릭터 발 위치
 
-export const FPS = 60;            // 고정 업데이트 주기. 모든 프레임 데이터는 1/60초 단위
-export const GRAVITY = 0.38;
-export const FRICTION = 0.85;     // 피격/가드 중 넉백이 줄어드는 비율
-export const SCREEN_MARGIN = 9;  // 캐릭터가 화면 끝에 붙을 수 있는 최소 거리
+// ── 리듬 ──
+export const BPM = 120;
+export const BEAT = 60 / BPM;     // 1박 (초)
+export const BAR = BEAT * 4;      // 1마디
+export const STEP = BEAT / 2;     // 노트 간격 = 8분음표
+export const SCROLL_SPEED = 120;  // 노트가 흐르는 속도 (px/초)
 
-export const ROUND_TIME = 99;     // 초
-export const ROUNDS_TO_WIN = 2;   // 2선승제
+// 판정 범위 (초, ±)
+export const WINDOWS = { perfect: 0.045, great: 0.09, good: 0.135 };
+
+// ── 전투 ──
+export const MAX_HP = 100;
+export const ROUNDS_TO_WIN = 2;
+export const DAMAGE = { light: 5, heavy: 8 };                            // 펀치 / 킥 기본 피해
+export const GRADE_POWER = { perfect: 1, great: 0.8, good: 0.6, miss: 0 }; // 공격 정확도 → 위력
+export const GUARD_TAKEN = { perfect: 0, great: 0.25, good: 0.5, miss: 1 }; // 방어 정확도 → 받는 피해 비율

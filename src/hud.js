@@ -1,9 +1,10 @@
-// 체력바, 타이머, 라운드 표시, 중앙 메시지
-import { SCREEN_W, SCREEN_H, ROUNDS_TO_WIN, FPS } from './config.js';
+// 체력바, 이름, 승리 표시, 박자 하트
+import { SCREEN_W, ROUNDS_TO_WIN, MAX_HP } from './config.js';
 
 export const FONT = '"Press Start 2P", monospace';
+const INK = '#4a2546';
 
-export function drawText(ctx, str, x, y, { size = 8, align = 'left', color = '#fff', shadow = '#4a2546' } = {}) {
+export function drawText(ctx, str, x, y, { size = 8, align = 'left', color = '#fff', shadow = INK } = {}) {
   ctx.font = `${size}px ${FONT}`;
   ctx.textAlign = align;
   ctx.textBaseline = 'top';
@@ -15,65 +16,64 @@ export function drawText(ctx, str, x, y, { size = 8, align = 'left', color = '#f
   ctx.fillText(str, x, y);
 }
 
-export class HUD {
-  constructor() { this.lag = [0, 0]; }
-  reset(p1, p2) { this.lag = [p1.hp, p2.hp]; }
+const HEART = ['.XX.XX.', 'XXXXXXX', 'XXXXXXX', '.XXXXX.', '..XXX..', '...X...'];
+const HEART_BIG = ['.XXX.XXX.', 'XXXXXXXXX', 'XXXXXXXXX', 'XXXXXXXXX', '.XXXXXXX.', '..XXXXX..', '...XXX...', '....X....'];
 
-  /** 빨간 "깎인 체력" 부분이 천천히 따라 줄어들게 */
+export function stamp(ctx, shape, cx, cy, color) {
+  ctx.fillStyle = color;
+  const ox = Math.floor(shape[0].length / 2), oy = Math.floor(shape.length / 2);
+  shape.forEach((row, j) => {
+    for (let i = 0; i < row.length; i++) if (row[i] === 'X') ctx.fillRect(cx + i - ox, cy + j - oy, 1, 1);
+  });
+}
+
+export class HUD {
+  constructor() { this.lag = [MAX_HP, MAX_HP]; }
+  reset() { this.lag = [MAX_HP, MAX_HP]; }
+
   update(p1, p2) {
     [p1, p2].forEach((p, i) => {
-      this.lag[i] = this.lag[i] > p.hp ? Math.max(p.hp, this.lag[i] - 0.4) : p.hp;
+      this.lag[i] = this.lag[i] > p.hp ? Math.max(p.hp, this.lag[i] - 0.6) : p.hp;
     });
   }
 
-  draw(ctx, game) {
-    const { p1, p2 } = game;
-    const W = 88, H = 6, Y = 6;
-    this.bar(ctx, 8, Y, W, H, p1, this.lag[0], false);
-    this.bar(ctx, SCREEN_W - 8 - W, Y, W, H, p2, this.lag[1], true);
+  draw(ctx, p1, p2, beatFrac) {
+    const W = 110, H = 7, Y = 8;
+    this.bar(ctx, 10, Y, W, H, p1, this.lag[0], false);
+    this.bar(ctx, SCREEN_W - 10 - W, Y, W, H, p2, this.lag[1], true);
 
-    // 타이머
-    ctx.fillStyle = '#4a2546';
-    ctx.fillRect(SCREEN_W / 2 - 18, 3, 36, 18);
-    drawText(ctx, String(Math.ceil(game.timer / FPS)).padStart(2, '0'), SCREEN_W / 2, 4, { size: 16, align: 'center', color: '#ffd6e8' });
+    // 가운데: 박자에 맞춰 뛰는 하트
+    ctx.fillStyle = INK;
+    ctx.fillRect(SCREEN_W / 2 - 13, 3, 26, 20);
+    const big = beatFrac < 0.15;
+    stamp(ctx, big ? HEART_BIG : HEART, SCREEN_W / 2, 13, big ? '#ff7fa8' : '#d65a86');
 
-    // 이름 + 승리 표시
-    drawText(ctx, p1.name, 8, Y + H + 4);
-    drawText(ctx, p2.name, SCREEN_W - 8, Y + H + 4, { align: 'right' });
+    drawText(ctx, p1.name, 10, Y + H + 4, { color: p1.color });
+    drawText(ctx, p2.name, SCREEN_W - 10, Y + H + 4, { align: 'right', color: p2.color });
     for (let i = 0; i < ROUNDS_TO_WIN; i++) {
-      this.winMark(ctx, 8 + p1.name.length * 8 + 4 + i * 8, Y + H + 4, i < p1.wins);
-      this.winMark(ctx, SCREEN_W - 8 - p2.name.length * 8 - 10 - i * 8, Y + H + 4, i < p2.wins);
-    }
-
-    // 중앙 메시지
-    if (game.message) {
-      drawText(ctx, game.message, SCREEN_W / 2, SCREEN_H / 2 - 30, { size: 16, align: 'center', color: '#fff4c8' });
-    }
-    if (game.subMessage && Math.floor(game.phaseFrame / 30) % 2 === 0) {
-      drawText(ctx, game.subMessage, SCREEN_W / 2, SCREEN_H / 2 - 6, { size: 8, align: 'center' });
+      this.winMark(ctx, 10 + p1.name.length * 8 + 4 + i * 8, Y + H + 4, i < p1.wins);
+      this.winMark(ctx, SCREEN_W - 10 - p2.name.length * 8 - 10 - i * 8, Y + H + 4, i < p2.wins);
     }
   }
 
   bar(ctx, x, y, w, h, p, lag, mirror) {
-    ctx.fillStyle = '#4a2546';
+    ctx.fillStyle = INK;
     ctx.fillRect(x - 1, y - 1, w + 2, h + 2);
     ctx.fillStyle = '#7a5a86';
     ctx.fillRect(x, y, w, h);
-    const lagW = Math.round((w * lag) / p.stats.maxHp);
-    const hpW = Math.round((w * p.hp) / p.stats.maxHp);
-    // P1은 화면 중앙 쪽에 붙어서 바깥쪽부터 줄어든다 (P2는 반대)
     const fill = (fw, color) => {
       ctx.fillStyle = color;
       ctx.fillRect(mirror ? x : x + w - fw, y, fw, h);
     };
-    fill(lagW, '#ff5f7e');
-    fill(hpW, p.hp / p.stats.maxHp > 0.3 ? '#8ee8b8' : '#ffb36b');
-    ctx.fillStyle = 'rgba(255,255,255,0.35)';
-    ctx.fillRect(mirror ? x : x + w - hpW, y, hpW, 1); // 하이라이트
+    fill(Math.round((w * lag) / MAX_HP), '#ff5f7e');
+    const hpW = Math.round((w * p.hp) / MAX_HP);
+    fill(hpW, p.hp / MAX_HP > 0.3 ? '#8ee8b8' : '#ffb36b');
+    ctx.fillStyle = 'rgba(255,255,255,0.4)';
+    ctx.fillRect(mirror ? x : x + w - hpW, y, hpW, 1);
   }
 
   winMark(ctx, x, y, on) {
-    ctx.fillStyle = '#4a2546';
+    ctx.fillStyle = INK;
     ctx.fillRect(x, y, 6, 6);
     ctx.fillStyle = on ? '#ff9cc6' : '#7a5a86';
     ctx.fillRect(x + 1, y + 1, 4, 4);
