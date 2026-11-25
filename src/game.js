@@ -34,8 +34,8 @@ export class Game {
     this.debug = false;
     this.p2Keyboard = new KeyboardController(KEYMAPS.p2);
     this.p2AI = new AIController();
-    this.p1 = new Fighter(CHARACTERS.blaze, new KeyboardController(KEYMAPS.p1));
-    this.p2 = new Fighter(CHARACTERS.frost, this.p2AI); // 기본은 CPU (F1로 2인용 전환)
+    this.p1 = new Fighter(CHARACTERS.momo, new KeyboardController(KEYMAPS.p1));
+    this.p2 = new Fighter(CHARACTERS.yuki, this.p2AI); // 기본은 CPU (F1로 2인용 전환)
     this.stage = new Stage();
     this.camera = new Camera();
     this.effects = new Effects();
@@ -51,8 +51,8 @@ export class Game {
 
   startRound() {
     const mid = STAGE_W / 2;
-    this.p1.reset(mid - 60, 1);
-    this.p2.reset(mid + 60, -1);
+    this.p1.reset(mid - 50, 1);
+    this.p2.reset(mid + 50, -1);
     this.timer = ROUND_TIME * FPS;
     this.hitstop = 0;
     this.effects.clear();
@@ -167,7 +167,7 @@ export class Game {
   resolvePush() {
     const { p1: a, p2: b } = this;
     if (a.state === 'ko' || b.state === 'ko') return;
-    const vertical = a.y - 50 < b.y && b.y - 50 < a.y; // 높이 차가 크면(점프로 넘어감) 통과
+    const vertical = a.y - 34 < b.y && b.y - 34 < a.y; // 높이 차가 크면(점프로 넘어감) 통과
     if (!vertical) return;
     const min = (a.width + b.width) / 2;
     const dx = b.x - a.x;
@@ -207,6 +207,6 @@ export class Game {
       drawText(ctx, info(this.p1), 4, SCREEN_H - 20, { size: 8, color: '#3cdc6e' });
       drawText(ctx, info(this.p2), SCREEN_W - 4, SCREEN_H - 20, { size: 8, align: 'right', color: '#3cdc6e' });
     }
-    drawText(ctx, this.p2.controller === this.p2AI ? 'P2:CPU' : 'P2:HUMAN', SCREEN_W - 4, SCREEN_H - 10, { size: 8, align: 'right', color: '#8a7aa0' });
+    drawText(ctx, this.p2.controller === this.p2AI ? 'P2:CPU' : 'P2:HUMAN', SCREEN_W - 4, SCREEN_H - 10, { size: 8, align: 'right', color: '#7a5a86' });
   }
 }

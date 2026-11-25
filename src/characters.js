@@ -1,19 +1,45 @@
 // 캐릭터 정의. 새 캐릭터는 여기에 추가.
-// sprite 에 스프라이트 시트 설정을 넣으면 임시 그래픽 대신 그 그림을 사용한다 (src/sprite.js 참고).
+// look: 치비 렌더러(src/chibi.js)용 외형 — 팔레트 + 머리 장식 조합
+// sprite: 스프라이트 시트 설정을 넣으면 look 대신 그 그림을 사용 (src/sprite.js 참고)
 import { MOVES } from './moves.js';
 
 export const CHARACTERS = {
-  blaze: {
-    name: 'BLAZE',
-    palette: { skin: '#f2c79b', main: '#c8443c', dark: '#5a2a3a', hair: '#3a2418', accent: '#f5d061', outline: '#1a1020' },
-    stats: { maxHp: 100, walkSpeed: 1.6, backSpeed: 1.2, jumpVel: -8, jumpVx: 2.2 },
+  momo: {
+    name: 'MOMO',
+    look: {
+      outline: '#4a2546',
+      colors: {
+        H: '#ff9cc6', h: '#e0679f', // 딸기우유 핑크 머리
+        I: '#d0457f',               // 눈 색
+        O: '#9ee3c2', o: '#62bf9c', // 민트 옷
+        A: '#ff5f7e', a: '#c93a5a', // 딸기 레드 포인트
+        K: '#ff5f7e',               // 신발
+      },
+      accessories: [
+        { part: 'bun', x: 1, y: -3 },
+        { part: 'bun', x: 12, y: -4 },
+        { part: 'clip', x: 15, y: 6 },
+      ],
+    },
+    stats: { maxHp: 100, walkSpeed: 1.4, backSpeed: 1.1, jumpVel: -6.5, jumpVx: 1.8 },
     moves: MOVES,
     sprite: null,
   },
-  frost: {
-    name: 'FROST',
-    palette: { skin: '#e8b98f', main: '#3c6fc8', dark: '#232c5a', hair: '#e8e8f0', accent: '#8ee6f0', outline: '#0e1424' },
-    stats: { maxHp: 110, walkSpeed: 1.4, backSpeed: 1.1, jumpVel: -7.6, jumpVx: 2 },
+  yuki: {
+    name: 'YUKI',
+    look: {
+      outline: '#2c2a55',
+      colors: {
+        H: '#f2f5ff', h: '#a8b8e8', // 눈처럼 하얀 머리
+        I: '#4a7fe0',
+        O: '#c2b0f5', o: '#9480d8', // 라벤더 옷
+        A: '#7fcfff', a: '#4a96d6', // 하늘색 리본
+        K: '#7a6ad0',
+      },
+      back: [{ part: 'longHair', x: 0, y: 14 }],
+      accessories: [{ part: 'ribbon', x: 0, y: -2 }],
+    },
+    stats: { maxHp: 110, walkSpeed: 1.25, backSpeed: 1.0, jumpVel: -6.3, jumpVx: 1.7 },
     moves: MOVES,
     sprite: null,
   },

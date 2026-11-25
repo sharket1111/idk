@@ -11,9 +11,9 @@ import { GRAVITY, GROUND_Y, FRICTION } from './config.js';
 import { SpriteSheet } from './sprite.js';
 
 const NULL_INPUT = { held: () => false, pressed: () => false };
-const DEFAULT_STATS = { maxHp: 100, walkSpeed: 1.5, backSpeed: 1.2, jumpVel: -8, jumpVx: 2 };
-const STAND_H = 56;
-const CROUCH_H = 40;
+const DEFAULT_STATS = { maxHp: 100, walkSpeed: 1.5, backSpeed: 1.2, jumpVel: -6.5, jumpVx: 1.8 };
+const STAND_H = 38;
+const CROUCH_H = 30;
 const KNOCKDOWN_FRAMES = 60;
 
 export class Fighter {
@@ -25,7 +25,7 @@ export class Fighter {
     this.moves = def.moves;
     this.controller = controller;
     this.sprite = def.sprite ? new SpriteSheet(def.sprite) : null;
-    this.width = 22;
+    this.width = 18;
     this.wins = 0;
     this.reset(0, 1);
   }
