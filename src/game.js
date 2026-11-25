@@ -34,12 +34,24 @@ export class Game {
     this.debug = false;
     this.p2Keyboard = new KeyboardController(KEYMAPS.p2);
     this.p2AI = new AIController();
-    this.p1 = new Fighter(CHARACTERS.momo, new KeyboardController(KEYMAPS.p1));
-    this.p2 = new Fighter(CHARACTERS.yuki, this.p2AI); // 기본은 CPU (F1로 2인용 전환)
+    this.roster = Object.keys(CHARACTERS);
+    this.pick = [0, 1];
+    this.p1 = new Fighter(CHARACTERS[this.roster[0]], new KeyboardController(KEYMAPS.p1));
+    this.p2 = new Fighter(CHARACTERS[this.roster[1]], this.p2AI); // 기본은 CPU (F1로 2인용 전환)
     this.stage = new Stage();
     this.camera = new Camera();
     this.effects = new Effects();
     this.hud = new HUD();
+    this.startMatch();
+  }
+
+  /** 캐릭터 교체 (F2: P1, F4: P2) 후 매치 재시작 */
+  nextCharacter(i) {
+    this.pick[i] = (this.pick[i] + 1) % this.roster.length;
+    const old = i === 0 ? this.p1 : this.p2;
+    const f = new Fighter(CHARACTERS[this.roster[this.pick[i]]], old.controller);
+    if (i === 0) this.p1 = f;
+    else this.p2 = f;
     this.startMatch();
   }
 
@@ -70,6 +82,8 @@ export class Game {
   // ───────────────────────── 업데이트 (1/60초마다) ─────────────────────────
   update() {
     if (wasPressed('F3')) this.debug = !this.debug;
+    if (wasPressed('F2')) this.nextCharacter(0);
+    if (wasPressed('F4')) this.nextCharacter(1);
     if (wasPressed('F1')) this.p2.controller = this.p2.controller === this.p2AI ? this.p2Keyboard : this.p2AI;
 
     this.p1.controller.update(this.p1, this.p2);

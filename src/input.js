@@ -6,7 +6,7 @@ export const KEYMAPS = {
   p2: { left: 'ArrowLeft', right: 'ArrowRight', up: 'ArrowUp', down: 'ArrowDown', light: 'Comma', heavy: 'Period' },
 };
 
-const SYSTEM_KEYS = ['F1', 'F3', 'Enter', 'Space'];
+const SYSTEM_KEYS = ['F1', 'F2', 'F3', 'F4', 'Enter', 'Space'];
 const down = new Set();        // 현재 눌려 있는 키
 const justDown = new Set();    // 이번 업데이트에서 새로 눌린 키 (시스템 키용)
 const blocked = new Set([...SYSTEM_KEYS, ...Object.values(KEYMAPS.p1), ...Object.values(KEYMAPS.p2)]);

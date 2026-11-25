@@ -41,8 +41,8 @@ export class HUD {
     drawText(ctx, p1.name, 8, Y + H + 4);
     drawText(ctx, p2.name, SCREEN_W - 8, Y + H + 4, { align: 'right' });
     for (let i = 0; i < ROUNDS_TO_WIN; i++) {
-      this.winMark(ctx, 8 + 36 + i * 8, Y + H + 4, i < p1.wins);
-      this.winMark(ctx, SCREEN_W - 8 - 42 - i * 8, Y + H + 4, i < p2.wins);
+      this.winMark(ctx, 8 + p1.name.length * 8 + 4 + i * 8, Y + H + 4, i < p1.wins);
+      this.winMark(ctx, SCREEN_W - 8 - p2.name.length * 8 - 10 - i * 8, Y + H + 4, i < p2.wins);
     }
 
     // 중앙 메시지

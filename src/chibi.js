@@ -48,6 +48,15 @@ export const PARTS = {
     '.hHh',
     '..h.',
   ],
+  circlet: ['AAAAAAAAaAAA'], // 머리띠(금고아)
+  tail: [
+    '.hh...',
+    'h..h..',
+    'h.....',
+    'h.....',
+    '.hh...',
+    '...hhh',
+  ],
   catEars: [
     'h........h',
     'hA......Ah',
