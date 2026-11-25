@@ -1,0 +1,28 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Pixel Fighter</title>
+  <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet" />
+  <style>
+    html, body { margin: 0; height: 100%; background: #0c0a14; color: #b8b0c8; font-family: sans-serif; }
+    body { display: flex; flex-direction: column; align-items: center; justify-content: center; }
+    /* 저해상도 캔버스를 정수배로 확대하고, 픽셀이 뭉개지지 않게 */
+    canvas { display: block; image-rendering: pixelated; image-rendering: crisp-edges; }
+    .help { font-size: 12px; margin-top: 10px; text-align: center; line-height: 1.7; }
+    kbd { background: #2a2338; border-radius: 3px; padding: 0 4px; color: #fff; }
+  </style>
+</head>
+<body>
+  <canvas id="game"></canvas>
+  <div class="help">
+    P1: <kbd>A</kbd><kbd>D</kbd> 이동 · <kbd>W</kbd> 점프 · <kbd>S</kbd> 앉기 · <kbd>J</kbd> 약공격 · <kbd>K</kbd> 강공격
+    &nbsp;|&nbsp;
+    P2: <kbd>←</kbd><kbd>→</kbd> · <kbd>↑</kbd> · <kbd>↓</kbd> · <kbd>,</kbd> 약 · <kbd>.</kbd> 강<br />
+    상대 반대 방향 누르기 = 가드 (앉아서 = 하단 가드) ·
+    <kbd>F1</kbd> P2 CPU 켜기/끄기 · <kbd>F3</kbd> 히트박스 보기 · <kbd>Enter</kbd> 재시작
+  </div>
+  <script type="module" src="src/main.js"></script>
+</body>
+</html>
