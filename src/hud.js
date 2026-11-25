@@ -28,21 +28,21 @@ export class HUD {
 
   draw(ctx, game) {
     const { p1, p2 } = game;
-    const W = 120, H = 8, Y = 10;
-    this.bar(ctx, 12, Y, W, H, p1, this.lag[0], false);
-    this.bar(ctx, SCREEN_W - 12 - W, Y, W, H, p2, this.lag[1], true);
+    const W = 88, H = 6, Y = 6;
+    this.bar(ctx, 8, Y, W, H, p1, this.lag[0], false);
+    this.bar(ctx, SCREEN_W - 8 - W, Y, W, H, p2, this.lag[1], true);
 
     // 타이머
     ctx.fillStyle = '#4a2546';
-    ctx.fillRect(SCREEN_W / 2 - 14, 5, 28, 18);
-    drawText(ctx, String(Math.ceil(game.timer / FPS)).padStart(2, '0'), SCREEN_W / 2, 7, { size: 16, align: 'center', color: '#ffd6e8' });
+    ctx.fillRect(SCREEN_W / 2 - 18, 3, 36, 18);
+    drawText(ctx, String(Math.ceil(game.timer / FPS)).padStart(2, '0'), SCREEN_W / 2, 4, { size: 16, align: 'center', color: '#ffd6e8' });
 
     // 이름 + 승리 표시
-    drawText(ctx, p1.name, 12, Y + H + 4);
-    drawText(ctx, p2.name, SCREEN_W - 12, Y + H + 4, { align: 'right' });
+    drawText(ctx, p1.name, 8, Y + H + 4);
+    drawText(ctx, p2.name, SCREEN_W - 8, Y + H + 4, { align: 'right' });
     for (let i = 0; i < ROUNDS_TO_WIN; i++) {
-      this.winMark(ctx, 12 + 42 + i * 8, Y + H + 4, i < p1.wins);
-      this.winMark(ctx, SCREEN_W - 12 - 44 - i * 8, Y + H + 4, i < p2.wins);
+      this.winMark(ctx, 8 + 36 + i * 8, Y + H + 4, i < p1.wins);
+      this.winMark(ctx, SCREEN_W - 8 - 42 - i * 8, Y + H + 4, i < p2.wins);
     }
 
     // 중앙 메시지
@@ -69,7 +69,7 @@ export class HUD {
     fill(lagW, '#ff5f7e');
     fill(hpW, p.hp / p.stats.maxHp > 0.3 ? '#8ee8b8' : '#ffb36b');
     ctx.fillStyle = 'rgba(255,255,255,0.35)';
-    ctx.fillRect(mirror ? x : x + w - hpW, y, hpW, 2); // 하이라이트
+    ctx.fillRect(mirror ? x : x + w - hpW, y, hpW, 1); // 하이라이트
   }
 
   winMark(ctx, x, y, on) {

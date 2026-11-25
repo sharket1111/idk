@@ -7,62 +7,50 @@ const SIZE = 64;
 const OX = 32; // 캔버스 안의 발 위치
 const OY = 58;
 
-// 머리 (20x20). 글자 = 팔레트 키, '.' = 투명
+// 머리 (14x14). 글자 = 팔레트 키, '.' = 투명
 // H/h 머리카락(밝음/그림자) S/s 피부 E 눈동자 W 하이라이트 I 홍채 B 볼터치 M 입
 const HEAD = [
-  '......hhhhhhh.......',
-  '....hhHHHHHHHhh.....',
-  '...hHHHHHHHHHHHh....',
-  '..hHHHHHHHHHHHHHh...',
-  '.hHHHHHHHHHHHHHHHh..',
-  '.HHHHHHHHHHHHHHHHHh.',
-  'hHHHHHHHHHHHHHHHHHHh',
-  'hHHHHHHHHHHHHHHHHHHh',
-  'hHHHHHHHHSHHHHSHHHHh',
-  'hHHHHHHHSSSHHSSSHHSh',
-  'hHHHHHHSSSSSSSSSSSSh',
-  'hHHHHHSSSSSSSSSSSSSh',
-  'hHHHHHSSSSEESSSSEESh',
-  'hHHHHsSSSSEWSSSSEWSh',
-  'hHHHHsSSSSIISSSSIISh',
-  '.HHHHsSSSSIISSSSIIS.',
-  '.hHHHsSSSBBSSMSSBBS.',
-  '..hHHsSSSSSSSSSSSSs.',
-  '...hHssSSSSSSSSSSs..',
-  '.....ssssssssssss...',
+  '....hhhhh.....',
+  '..hhHHHHHhh...',
+  '.hHHHHHHHHHh..',
+  '.HHHHHHHHHHHh.',
+  'hHHHHHHHHHHHHh',
+  'hHHHHHHSHHHSHh',
+  'hHHHHHSSSHSSSh',
+  'hHHHHSSSSSSSSh',
+  'hHHHsSEWSSEWSh',
+  'hHHHsSIISSIISh',
+  '.HHHsBSSSSSSB.',
+  '..HhsSSSSSSSs.',
+  '...hssSSSSSs..',
+  '.....sssss....',
 ];
 
 // 머리 장식 / 뒷머리 (캐릭터별로 골라 씀)
 export const PARTS = {
   bun: [
-    '.hhh..',
-    'hHHHh.',
-    'hHHHHh',
-    'hHHHHh',
-    '.hHHh.',
+    '.hh.',
+    'hHHh',
+    'hHHh',
+    '.hh.',
   ],
-  clip: ['AA', 'Aa'],
+  clip: ['Aa'],
   ribbon: [
-    'AAA...AAA',
-    'AAaA.AaAA',
-    'AAAAaAAAA',
-    'AAaA.AaAA',
-    'AAA...AAA',
+    'AA...AA',
+    'AAaAaAA',
+    'AA...AA',
   ],
   longHair: [
-    'hHHh.',
-    'hHHh.',
-    'hHHHh',
-    'hHHHh',
-    'hHHHh',
-    '.hHHh',
-    '.hHh.',
-    '..h..',
+    'hHh.',
+    'hHHh',
+    'hHHh',
+    'hHHh',
+    '.hHh',
+    '..h.',
   ],
   catEars: [
-    'h.........h',
-    'hh.......hh',
-    'hAh.....hAh',
+    'h........h',
+    'hA......Ah',
   ],
 };
 
@@ -105,7 +93,7 @@ function poseOf(f) {
       break;
     case 'crouch':
       p.legs = 'crouch';
-      p.body = 6;
+      p.body = 4;
       break;
     case 'jump':
       p.legs = 'tuck';
@@ -113,7 +101,7 @@ function poseOf(f) {
       p.back = 'up';
       break;
     case 'attack': {
-      if (m.crouch) { p.legs = 'crouch'; p.body = 6; }
+      if (m.crouch) { p.legs = 'crouch'; p.body = 4; }
       if (m.air) p.legs = 'tuck';
       const hb = m.hitbox;
       if (f.attackPhase === 'active') {
@@ -131,7 +119,7 @@ function poseOf(f) {
       p.arm = 'block';
       p.face = 'blink';
       p.lean = -1;
-      if (f.blockCrouch) { p.legs = 'crouch'; p.body = 6; }
+      if (f.blockCrouch) { p.legs = 'crouch'; p.body = 4; }
       break;
     case 'hitstun':
       p.arm = 'up';
@@ -182,7 +170,7 @@ export class ChibiRenderer {
     const stand = this.get({ ...pose, lying: false, arm: 'up', back: 'up', legs: 'stand', lean: 0 });
     const c = makeCanvas();
     const g = c.getContext('2d');
-    g.translate(OX + 17, OY - 9);
+    g.translate(OX + 12, OY - 7);
     g.rotate(-Math.PI / 2);
     g.drawImage(stand, -OX, -OY);
     return c;
@@ -207,75 +195,76 @@ export class ChibiRenderer {
       });
     };
 
-    const top = -17 + p.body; // 몸통 윗선
-    const sh = top + 2;        // 어깨 높이
-    const hx = -9 + p.lean;    // 머리 왼쪽
-    const hy = top - 18;       // 머리 위쪽
+    const top = -12 + p.body; // 몸통 윗선
+    const sh = top + 1;        // 어깨 높이
+    const hx = -6 + p.lean;    // 머리 왼쪽
+    const hy = top - 12;       // 머리 위쪽
 
     // 1) 뒷머리
     for (const a of L.back || []) grid(PARTS[a.part], hx + a.x, hy + a.y);
 
     // 2) 뒷팔
-    if (p.back === 'back') { r(-8, sh, 3, 3, 'o'); r(-9, sh + 1, 2, 2, 's'); }
-    else if (p.back === 'up') { r(-8, sh - 2, 3, 3, 'o'); r(-8, sh - 4, 3, 2, 's'); }
-    else { r(-7, sh, 3, 3, 'o'); r(-7, sh + 3, 3, 2, 's'); }
+    if (p.back === 'back') { r(-6, sh, 2, 2, 'o'); r(-7, sh, 1, 2, 's'); }
+    else if (p.back === 'up') { r(-5, sh - 2, 2, 2, 'o'); r(-5, sh - 3, 2, 1, 's'); }
+    else { r(-5, sh, 2, 2, 'o'); r(-5, sh + 2, 2, 1, 's'); }
 
     // 3) 다리
-    const shoe = (x, y, w = 4) => r(x, y, w, 2, 'K');
+    const shoe = (x, y, w = 3) => r(x, y, w, 1, 'K');
     switch (p.legs) {
       case 'stand':
-        r(-4, -8, 3, 7, 'L'); r(1, -8, 3, 7, 'L'); shoe(-5, -2); shoe(1, -2, 5);
+        r(-3, -5, 2, 4, 'L'); r(1, -5, 2, 4, 'L'); shoe(-4, -1); shoe(1, -1);
         break;
       case 'walk': {
         const o = [0, 1, 0, -1][p.step];
-        r(-4 + o, -8, 3, 7 - Math.max(0, o), 'L'); r(1 - o, -8, 3, 7 - Math.max(0, -o), 'L');
-        shoe(-5 + o, -2 - Math.max(0, o)); shoe(1 - o, -2 - Math.max(0, -o), 5);
+        const lb = o > 0 ? 1 : 0, lf = o < 0 ? 1 : 0; // 들린 발
+        r(-3 + o, -5, 2, 4 - lb, 'L'); r(1 - o, -5, 2, 4 - lf, 'L');
+        shoe(-4 + o, -1 - lb); shoe(1 - o, -1 - lf);
         break;
       }
       case 'crouch':
-        r(-6, -4, 4, 3, 'L'); r(2, -4, 4, 3, 'L'); shoe(-7, -2); shoe(3, -2, 5);
+        r(-4, -2, 2, 1, 'L'); r(2, -2, 2, 1, 'L'); shoe(-5, -1); shoe(2, -1);
         break;
       case 'tuck':
-        r(-4, -8, 3, 4, 'L'); r(1, -7, 3, 3, 'L'); shoe(-5, -5); shoe(2, -5);
+        r(-3, -5, 2, 2, 'L'); r(1, -4, 2, 1, 'L'); shoe(-4, -3); shoe(2, -3);
         break;
       case 'kick':
-        r(-6, -4, 4, 3, 'L'); shoe(-7, -2);
-        r(2, p.ky, p.reach - 6, 3, 'L'); r(p.reach - 4, p.ky - 1, 4, 4, 'K');
+        r(-4, -2, 2, 1, 'L'); shoe(-5, -1);
+        r(2, p.ky, p.reach - 4, 2, 'L'); r(p.reach - 2, p.ky - 1, 2, 3, 'K');
         break;
       case 'airkick':
-        r(-4, -8, 3, 4, 'L'); shoe(-5, -5);
-        r(1, p.ky, p.reach - 5, 3, 'L'); r(p.reach - 4, p.ky - 1, 4, 4, 'K');
+        r(-3, -5, 2, 2, 'L'); shoe(-4, -3);
+        r(1, p.ky, p.reach - 3, 2, 'L'); r(p.reach - 2, p.ky - 1, 2, 3, 'K');
         break;
     }
 
     // 4) 몸통 + 치마
-    r(-5, top, 10, 7, 'O'); r(-5, top, 2, 7, 'o');
-    r(-6, top + 6, 12, 3, 'O'); r(-6, top + 6, 3, 3, 'o'); r(-6, top + 8, 12, 1, 'T');
-    r(1, top, 3, 2, 'A'); r(2, top + 2, 1, 1, 'a'); // 리본 타이
+    r(-3, top, 7, 5, 'O'); r(-3, top, 1, 5, 'o');
+    r(-4, top + 4, 9, 2, 'O'); r(-4, top + 4, 2, 2, 'o'); r(-4, top + 5, 9, 1, 'T');
+    r(1, top, 2, 1, 'A'); // 리본 타이
 
-    // 5) 머리 + 표정
+    // 5) 머리 + 표정 (눈: 왼쪽 6~7열, 오른쪽 10~11열, 8~9행)
     const plainEyes = p.face !== 'normal' && p.face !== 'angry';
     grid(HEAD, hx, hy, (ch) => (plainEyes && 'EWI'.includes(ch) ? 'S' : ch));
     const e = (x, y) => r(hx + x, hy + y, 1, 1, 'E');
-    if (p.face === 'blink') { r(hx + 10, hy + 14, 2, 1, 'E'); r(hx + 16, hy + 14, 2, 1, 'E'); }
-    if (p.face === 'hurt') { e(10, 12); e(11, 13); e(10, 14); e(17, 12); e(16, 13); e(17, 14); }
+    if (p.face === 'blink') { r(hx + 6, hy + 9, 2, 1, 'E'); r(hx + 10, hy + 9, 2, 1, 'E'); }
+    if (p.face === 'hurt') { e(6, 7); e(7, 8); e(6, 9); e(11, 7); e(10, 8); e(11, 9); }
     if (p.face === 'ko') {
-      for (const x0 of [10, 16]) { e(x0, 12); e(x0 + 2, 12); e(x0 + 1, 13); e(x0, 14); e(x0 + 2, 14); }
+      for (const x0 of [5, 10]) { e(x0, 7); e(x0 + 2, 7); e(x0 + 1, 8); e(x0, 9); e(x0 + 2, 9); }
     }
-    if (p.face === 'angry' || p.face === 'hurt') r(hx + 13, hy + 16, 2, 2, 'M'); // 벌린 입
+    if (p.face === 'angry' || p.face === 'hurt') r(hx + 9, hy + 10, 1, 2, 'M'); // 벌린 입
 
     // 6) 머리 장식
     for (const a of L.accessories || []) grid(PARTS[a.part], hx + a.x, hy + a.y);
 
     // 7) 앞팔
     switch (p.arm) {
-      case 'guard': r(3, sh, 3, 3, 'O'); r(5, sh + 2, 3, 3, 'S'); break;
-      case 'pull': r(0, sh + 1, 3, 3, 'O'); r(-1, sh + 3, 3, 3, 'S'); break;
+      case 'guard': r(2, sh, 2, 2, 'O'); r(4, sh + 1, 2, 2, 'S'); break;
+      case 'pull': r(0, sh + 1, 2, 2, 'O'); r(-1, sh + 2, 2, 2, 'S'); break;
       case 'punch':
-        r(3, sh, 4, 3, 'O'); r(7, sh + 1, p.reach - 11, 2, 'S'); r(p.reach - 4, sh - 1, 4, 4, 'S');
+        r(2, sh, 3, 2, 'O'); r(5, sh, p.reach - 8, 1, 'S'); r(p.reach - 3, sh - 1, 3, 3, 'S');
         break;
-      case 'block': r(3, sh, 4, 3, 'O'); r(5, sh - 2, 3, 3, 'S'); r(7, sh, 3, 3, 'S'); break; // 주먹 두 개로 턱 가드
-      case 'up': r(1, sh - 2, 3, 3, 'O'); r(1, sh - 4, 3, 2, 'S'); break;
+      case 'block': r(2, sh, 3, 2, 'O'); r(4, sh - 2, 2, 2, 'S'); r(5, sh, 2, 2, 'S'); break; // 주먹 두 개로 턱 가드
+      case 'up': r(1, sh - 2, 2, 2, 'O'); r(1, sh - 3, 2, 1, 'S'); break;
     }
 
     return withOutline(c, L.outline);

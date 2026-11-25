@@ -6,8 +6,8 @@ export function drawFighter(ctx, f) {
   // 그림자 (둥근 타원 느낌)
   const X = Math.round(f.x);
   ctx.fillStyle = 'rgba(90,50,110,0.25)';
-  ctx.fillRect(X - 7, GROUND_Y - 1, 14, 3);
-  ctx.fillRect(X - 9, GROUND_Y, 18, 1);
+  ctx.fillRect(X - 5, GROUND_Y - 1, 10, 2);
+  ctx.fillRect(X - 6, GROUND_Y, 12, 1);
 
   if (f.sprite && f.sprite.loaded) {
     f.sprite.draw(ctx, f.animName, f.stateFrame, X, Math.round(f.y), f.facing === -1);

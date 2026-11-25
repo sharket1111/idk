@@ -11,9 +11,9 @@ import { GRAVITY, GROUND_Y, FRICTION } from './config.js';
 import { SpriteSheet } from './sprite.js';
 
 const NULL_INPUT = { held: () => false, pressed: () => false };
-const DEFAULT_STATS = { maxHp: 100, walkSpeed: 1.5, backSpeed: 1.2, jumpVel: -6.5, jumpVx: 1.8 };
-const STAND_H = 38;
-const CROUCH_H = 30;
+const DEFAULT_STATS = { maxHp: 100, walkSpeed: 1.5, backSpeed: 1.2, jumpVel: -5.2, jumpVx: 1.35 };
+const STAND_H = 26;
+const CROUCH_H = 20;
 const KNOCKDOWN_FRAMES = 60;
 
 export class Fighter {
@@ -25,7 +25,7 @@ export class Fighter {
     this.moves = def.moves;
     this.controller = controller;
     this.sprite = def.sprite ? new SpriteSheet(def.sprite) : null;
-    this.width = 18;
+    this.width = 13;
     this.wins = 0;
     this.reset(0, 1);
   }
@@ -221,14 +221,14 @@ export class Fighter {
     }
     this.hp = Math.max(0, this.hp - move.damage);
     if (this.hp === 0) {
-      this.vx = dir * 2.5;
-      this.vy = -4;
+      this.vx = dir * 1.9;
+      this.vy = -3.2;
       this.setState('ko');
       return 'ko';
     }
     if (move.knockdown || !this.onGround) {
-      this.vx = dir * 2;
-      this.vy = -3.5;
+      this.vx = dir * 1.5;
+      this.vy = -2.8;
       this.setState('knockdown');
       return 'hit';
     }

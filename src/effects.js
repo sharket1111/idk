@@ -1,7 +1,8 @@
 // 타격 이펙트: 별 모양 히트 스파크 + 하트/별 파티클, 가드는 비눗방울 링
-const STAR = ['..X..', '.XXX.', 'XXXXX', '.XXX.', '.X.X.'];
-const HEART = ['XX.XX', 'XXXXX', '.XXX.', '..X..'];
-const SPARK = ['.X.', 'XXX', '.X.'];
+const BURST = ['..X..', '.XXX.', 'XXXXX', '.XXX.', '.X.X.'];
+const STAR = ['.X.', 'XXX', '.X.'];
+const HEART = ['X.X', 'XXX', '.X.'];
+const SPARK = ['X'];
 
 function stamp(ctx, shape, x, y, color) {
   ctx.fillStyle = color;
@@ -22,7 +23,7 @@ export class Effects {
       const pick = type === 'block' ? 'spark' : ['heart', 'star', 'spark'][i % 3];
       this.list.push({
         type: 'particle', shape: pick, x, y, t: 0, life: 14 + Math.random() * 10,
-        vx: (Math.random() * 2 - 1) * 1.8, vy: -0.8 - Math.random() * 1.8,
+        vx: (Math.random() * 2 - 1) * 1.3, vy: -0.6 - Math.random() * 1.3,
         color: type === 'block' ? '#b8ecff' : { heart: '#ff7fa8', star: '#ffe27a', spark: '#ffffff' }[pick],
       });
     }
@@ -31,7 +32,7 @@ export class Effects {
   update() {
     for (const e of this.list) {
       e.t++;
-      if (e.type === 'particle') { e.x += e.vx; e.y += e.vy; e.vy += 0.1; e.vx *= 0.96; }
+      if (e.type === 'particle') { e.x += e.vx; e.y += e.vy; e.vy += 0.08; e.vx *= 0.96; }
     }
     this.list = this.list.filter((e) => e.t < e.life);
   }
@@ -41,16 +42,16 @@ export class Effects {
       const x = Math.round(e.x), y = Math.round(e.y);
       if (e.type === 'hit') {
         // 반짝이는 십자 + 가운데 별
-        const s = 2 + Math.round(e.t * 0.9);
+        const s = 2 + Math.round(e.t * 0.6);
         ctx.fillStyle = e.t % 4 < 2 ? '#ffffff' : '#ffe27a';
         ctx.fillRect(x - s, y, s * 2 + 1, 1);
         ctx.fillRect(x, y - s, 1, s * 2 + 1);
-        if (e.t < 8) stamp(ctx, STAR, x, y, e.t % 4 < 2 ? '#ffe27a' : '#ffffff');
+        if (e.t < 8) stamp(ctx, BURST, x, y, e.t % 4 < 2 ? '#ffe27a' : '#ffffff');
       } else if (e.type === 'block') {
-        const rad = 3 + e.t;
+        const rad = 2 + Math.round(e.t * 0.8);
         ctx.fillStyle = '#b8ecff';
-        for (let a = 0; a < 16; a++) {
-          const ang = (a / 16) * Math.PI * 2;
+        for (let a = 0; a < 12; a++) {
+          const ang = (a / 12) * Math.PI * 2;
           ctx.fillRect(Math.round(x + Math.cos(ang) * rad), Math.round(y + Math.sin(ang) * rad), 1, 1);
         }
       } else if (e.life - e.t > 3 || e.t % 2 === 0) { // 사라지기 직전 깜빡
